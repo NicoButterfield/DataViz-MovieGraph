@@ -8,7 +8,7 @@
  */
 "use strict";
 
-function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
+function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox) {
 
     // the current iteration
     var iter = 1,
@@ -23,7 +23,8 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
     
     var svg = d3.select(elt).append("svg")
         .style("width", width )
-        .style("height", height);
+        .style("height", height)
+        .attr("id", function(d) {return d});
         // .style("width", width + margin.left + margin.right)
         // .style("height", height + margin.top + margin.bottom);
         
@@ -151,7 +152,7 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
      */
     function update() {
     
-        let output = document.getElementById("output");
+        let output = document.getElementById(outputBox);
         var data = points.concat(centroids);
         
         // The data join
@@ -210,6 +211,7 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
     // Generate Lines from pointsArr
     function generateLines(pairsArr){
         const svg = d3.select("svg");
+        console.log("SVG",svg);
 
         let linesArr = [];
         for(var i = 0; i < pairsArr.length; i++){
@@ -325,13 +327,17 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
         console.log("MovieData", movieData);
         console.log("UniqueGenreArray", uniqueGenreArray);
 
-        // Call The Main Function
-        let go = document.getElementById("go");
-        let num = document.getElementById("number");
+        // Graph Movie Data
+        let go = document.getElementById(goButton); //Run
+        let num = document.getElementById(numPoints); //NumPoints
         go.innerHTML = num.value;
+
+        // On Input Change ==> update points value
         num.addEventListener("click", () => {
             go.innerHTML = num.value;
         })
+
+        // On GO => Graph
         go.addEventListener("click", () => {
             initialize(movieData, uniqueGenreArray);
         })
