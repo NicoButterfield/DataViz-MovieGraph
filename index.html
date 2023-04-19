@@ -10,16 +10,37 @@
     <script type="text/javascript" src="kmeans.js"></script>
     
     <link type="text/css" rel="stylesheet" href="kmeans.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
     
   </head>
   
   <body>
     <h1>K-means algorithm in D3.js</h1>
+    <div class="inputForm">
+        <label>1</label>
+        <input type="range" id="number" value="100" min="1" max="1000">
+        <label>1000</label>
+        <button id="go" type="submit" value="submit"></button>
+    </div>
+
+
+    <div class="bodyContainer">
+      <div id="kmeans" class="kmeans-chart"></div>
+      <div class="output">
+        <textarea readonly id="output"></textarea>
+      </div>
+    </div>
     
-    <div id="kmeans" class="kmeans-chart"></div>
+
     
   </body>
   
-  <script type="text/javascript">kMeans("#kmeans", 500, 500, 1000, 5, 10);</script>
+  <script type="text/javascript">kMeans("#kmeans", 500, 500, "number", 21, 10);</script>
+                            <!-- kMeans(elt, w, h, numPoints, numClusters, maxIter) { -->
+                              <!-- numPoints => 1000 Movies -->
+                              <!-- numClusters => 21 Genres -->
  
 </html> 

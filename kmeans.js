@@ -22,19 +22,20 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
     var colors = d3.scale.category20().range();
     
     var svg = d3.select(elt).append("svg")
-        .style("width", width + margin.left + margin.right)
-        .style("height", height + margin.top + margin.bottom);
+        .style("width", width )
+        .style("height", height);
+        // .style("width", width + margin.left + margin.right)
+        // .style("height", height + margin.top + margin.bottom);
         
     var group = svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     svg.append("g")
         .append("text")
         .attr("class", "label")
-        .attr("transform", "translate(" + (width - margin.left - margin.right) + 
-            "," + (height + margin.top + margin.bottom) + ")")
+        // .attr("transform", "translate(" + (width - margin.left - margin.right) + 
+        //     "," + (height + margin.top + margin.bottom) + ")")
         .text("");
-
     /**
      * Computes the euclidian distance between two points.
      */
@@ -48,26 +49,43 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
      * Returns a point with the specified type and fill color and with random 
      * x,y-coordinates.
      */
-    function getRandomPoint(type, fill) {
-        return { 
-            x: Math.round(Math.random() * width), 
-            y: Math.round(Math.random() * height),
-            type: type,
-            fill: fill 
-        };
+    function getRandomPoint(type, fill, i, currMovie, currGenre) {
+        // Centroids (GENRE TYPE)
+        if(type == "centroid"){
+            return { 
+                x: Math.round(Math.random() * width), 
+                y: Math.round(Math.random() * height),
+                type: type,
+                fill: fill,
+                genre: currGenre
+            };
+        }
+        // Points (MOVIE DATA)
+        else{
+            return{
+                x: Math.round(Math.random() * width), 
+                y: Math.round(Math.random() * height),
+                type: type,
+                fill: fill,
+                genre: currMovie.Genre,
+                rating: currMovie.IMDB_Rating,
+                Stars: [currMovie.Star1, currMovie.Star2, currMovie.Star3, currMovie.Star4],
+                Title: currMovie.Series_Title
+            }
+        }
     }
 
     /** 
      * Generates a specified number of random points of the specified type.
      */
-    function initializePoints(num, type) {
+    function initializePoints(num, type, movieData, uniqueGenreArray) {
         var result = [];
         for (var i = 0; i < num; i++) {
             var color = colors[i];
             if (type !== "centroid") {
                 color = "#ccc";
             }
-            var point = getRandomPoint(type, color);
+            var point = getRandomPoint(type, color, i, movieData[i], uniqueGenreArray[i]);
             point.id = point.type + "-" + i;
             result.push(point);
         }
@@ -133,17 +151,22 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
      */
     function update() {
     
+        let output = document.getElementById("output");
         var data = points.concat(centroids);
         
         // The data join
         var circle = group.selectAll("circle")
             .data(data);
-            
+    
         // Create new elements as needed
         circle.enter().append("circle")
             .attr("id", function(d) { return d.id; })
             .attr("class", function(d) { return d.type; })
-            .attr("r", 5);
+            .attr("r", 8)
+            .on("click", (d) => {
+                console.log(d.Title, d.Stars);
+                output.value = "Title: " + d.Title + "\nStars: " + d.Stars;
+            }); //Console Log Curr Point/Centroid onClick
             
         // Update old elements as needed
         circle.transition().delay(100).duration(1000)
@@ -183,18 +206,92 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
         update();
     }
 
+
+    // Generate Lines from pointsArr
+    function generateLines(pairsArr){
+        const svg = d3.select("svg");
+
+        let linesArr = [];
+        for(var i = 0; i < pairsArr.length; i++){
+            // X Y Coordinats
+            let x1 = pairsArr[i][0].x; let y1 = pairsArr[i][0].y;
+            let x2 = pairsArr[i][1].x; let y2 = pairsArr[i][1].y;
+
+            // Add Lines to LineArr
+            var source = {
+                x: x1,
+                y: y1
+            };
+            var target = {
+                x: x2,
+                y: y2
+            }
+            var lineObj = {
+                source: source,
+                target: target,
+                index: i
+            }
+
+            linesArr.push(lineObj);
+
+            // Draw Lines
+            svg.append('line')
+            .style("stroke", "navy")
+            .style("stroke-width", 0.5)
+            .attr("x1", x1)
+            .attr("y1", y1)
+            .attr("x2", x2)
+            .attr("y2", y2);
+        }
+        return linesArr;
+    }
+    function commonActor(a,b){
+        for(let i = 0; i < a.length; i++){
+            for(let j = 0; j < b.length; j++){
+                if(a[i] == b[j]){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    function moviePointPairs(points){
+        let pairArr = [];
+        for(let i = 0; i < points.length; i++){
+            let currActors = points[i].Stars;
+            for(let j = i+1; j < points.length; j++){
+                let compareActors = points[j].Stars;
+                if(commonActor(currActors, compareActors)){
+                    let pair = [];
+                    pair.push(points[i]);
+                    pair.push(points[j]);
+                    pairArr.push(pair);
+                }
+            }
+        }
+        return pairArr;
+    }
+
     /** 
      * The main function initializes the algorithm and calls an iteration every 
      * two seconds.
      */
-    function initialize() {
-        
+    function initialize(movieData, uniqueGenreArray) {
         // Initialize random points and centroids
-        centroids = initializePoints(numClusters, "centroid");
-        points = initializePoints(numPoints, "point");
+        centroids = initializePoints(numClusters, "centroid", movieData, uniqueGenreArray);
+        points = initializePoints(document.getElementById(numPoints).value, "point", movieData, uniqueGenreArray);
+
+        console.log("Centroids:", centroids);
+        console.log("Points:", points);
+
+        let pairs = moviePointPairs(points);
+        console.log("Pairs:", pairs);
         
         // initial drawing
         update();
+        let linesArr = generateLines(pairs);
+        console.log("LinesArr", linesArr);
+        
         
         var interval = setInterval(function() {
             if(iter < maxIter + 1) {
@@ -207,6 +304,37 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter) {
         }, 2 * 1000);
     }
 
-    // Call the main function
-    initialize();
+    function onlyUnique(value, index, array) {
+        return array.indexOf(value) === index;
+    }
+
+    // Read CSV file of Movie DataBase
+    d3.csv("./imdb_top_1000.csv", data => {
+        let movieData = [];
+        let genreArray = [];
+        for(let i = 0; i < data.length; i++){
+            movieData.push(data[i]);
+            let currGenre = data[i].Genre.split(", ");
+            for(let j = 0; j < currGenre.length; j++){
+                genreArray.push(currGenre[j]);
+            }
+
+        }
+        let uniqueGenreArray = genreArray.filter(onlyUnique);
+
+        console.log("MovieData", movieData);
+        console.log("UniqueGenreArray", uniqueGenreArray);
+
+        // Call The Main Function
+        let go = document.getElementById("go");
+        let num = document.getElementById("number");
+        go.innerHTML = num.value;
+        num.addEventListener("click", () => {
+            go.innerHTML = num.value;
+        })
+        go.addEventListener("click", () => {
+            initialize(movieData, uniqueGenreArray);
+        })
+    });
+
 }
