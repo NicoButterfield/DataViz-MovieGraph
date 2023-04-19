@@ -2,6 +2,7 @@ body{
     font-family: 'Montserrat', sans-serif;
     background-color: rgb(28, 77, 118); 
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
 
 }
