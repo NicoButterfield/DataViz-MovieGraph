@@ -1,8 +1,18 @@
 body{
     font-family: 'Montserrat', sans-serif;
     background-color: rgb(28, 77, 118); 
+    display: flex;
+    justify-content: space-around;
+
+}
+.bodyContainer{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 h1{
+    align-self: center;
     padding: 10px;
     width: fit-content;
     border: 1px solid black;
@@ -10,14 +20,14 @@ h1{
     background-color: whitesmoke;
 }
 .inputForm{
+    align-self: center;
     width: fit-content;
-    padding: 10px;
     display: flex;
     gap: 5px;
     align-items: center;
 }
 input{
-    width: 350px;
+    width: 300px;
     margin-bottom: 10px;
 }
 label{
@@ -39,11 +49,6 @@ button{
 button:hover{
     box-shadow: 3px 3px black;
     transform: scale(1.1);
-}
-.bodyContainer{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
 }
 .kmeans-chart {
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
@@ -75,7 +80,7 @@ button:hover{
 
 #output{
     height: 50px;
-    width: 500px;
+    width: 420px;
     border: 1px solid black;
 
 
