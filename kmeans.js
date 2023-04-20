@@ -219,9 +219,19 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
             let x2 = pairsArr[i][1].x; let y2 = pairsArr[i][1].y;
 
             // Add Lines to LineArr
+            var source = {
+                id: pairsArr[i][0].id,
+                x: x1,
+                y: y1
+            }
+            var target = {
+                id: pairsArr[i][1].id,
+                x: x2,
+                y: y2
+            }
             var link = {
-                source: pairsArr[i][0].id,
-                target: pairsArr[i][1].id,
+                source: source,
+                target: target,
                 weight: 1
             };
 
@@ -286,12 +296,12 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
         let linesArr = generateLines(pairs);
         console.log("LinesArr", linesArr);
 
-        // let jsonObj = {
-        //     nodes: points,
-        //     links: linesArr
-        // }
-        // let jsonFile = JSON.stringify(jsonObj);
-        // console.log(jsonFile);
+        let jsonObj = {
+            nodes: points,
+            links: linesArr
+        }
+        let jsonFile = JSON.stringify(jsonObj);
+        console.log(jsonFile);
         
         var interval = setInterval(function() {
             if(iter < maxIter + 1) {
