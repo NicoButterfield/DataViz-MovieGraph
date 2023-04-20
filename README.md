@@ -13,10 +13,10 @@
 
 ## Source Code Layout
 
-    movieGraph\	html/css/script files used to initial movie graph
-    fdGraph\	html/css/script files used for force directed algorithm graph
+    movieGraph\	    html/css/script files used to initial movie graph
+    fdGraph\	    html/css/script files used for force directed algorithm graph
     kmeansGraph\	    html/css/script files used for kmeans algorithm run on fdGraph
-    images\		Images used in project homepage	
+    images\		    Images used in project homepage	
     index.html          Project homepage
     main.css            Homepage styling
     README.md           README file that appears on the website's github page
