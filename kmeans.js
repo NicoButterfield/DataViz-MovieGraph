@@ -211,7 +211,6 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
     // Generate Lines from pointsArr
     function generateLines(pairsArr){
         const svg = d3.select("svg");
-        console.log("SVG",svg);
 
         let linesArr = [];
         for(var i = 0; i < pairsArr.length; i++){
@@ -220,21 +219,14 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
             let x2 = pairsArr[i][1].x; let y2 = pairsArr[i][1].y;
 
             // Add Lines to LineArr
-            var source = {
-                x: x1,
-                y: y1
+            var link = {
+                source: pairsArr[i][0].id,
+                target: pairsArr[i][1].id,
+                weight: 1
             };
-            var target = {
-                x: x2,
-                y: y2
-            }
-            var lineObj = {
-                source: source,
-                target: target,
-                index: i
-            }
 
-            linesArr.push(lineObj);
+
+            linesArr.push(link);
 
             // Draw Lines
             svg.append('line')
@@ -293,7 +285,13 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
         update();
         let linesArr = generateLines(pairs);
         console.log("LinesArr", linesArr);
-        
+
+        // let jsonObj = {
+        //     nodes: points,
+        //     links: linesArr
+        // }
+        // let jsonFile = JSON.stringify(jsonObj);
+        // console.log(jsonFile);
         
         var interval = setInterval(function() {
             if(iter < maxIter + 1) {
@@ -325,7 +323,7 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
         let uniqueGenreArray = genreArray.filter(onlyUnique);
 
         console.log("MovieData", movieData);
-        console.log("UniqueGenreArray", uniqueGenreArray);
+        // console.log("UniqueGenreArray", uniqueGenreArray);
 
         // Graph Movie Data
         let go = document.getElementById(goButton); //Run
