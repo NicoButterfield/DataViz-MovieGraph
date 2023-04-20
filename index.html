@@ -1,69 +1,23 @@
-<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="./main.css">
 
-    <script type="text/javascript" src="kmeans.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="kmeans.css">
-
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
-    
-  </head>
-  
-  <body>
-    <!-- Graph Movie Data -->
-    <div class="bodyContainer">
-      <h1>Movie's | Connections</h1>
-      <div class="inputForm">
-          <label>1</label><input type="range" id="graphNumber" value="100" min="1" max="1000"><label>1000</label>
-          <button id="graphMoviesButton" type="submit" value="submit"></button>
-      </div>
-      <div id="movieGraph" class="kmeans-chart"></div>
-      <div class="output">
-        <textarea readonly id="graphMoviesOutput"></textarea>
-      </div>
-    </div>
-
-    <!-- Force Directed Graph -->
-    <div class="bodyContainer">
-      <h1>Movie's | ForceDirected</h1>
-      <div class="inputForm">
-          <label>1</label><input type="range" id="fdNumber" value="100" min="1" max="1000"><label>1000</label>
-          <button id="fdButton" type="submit" value="submit"></button>
-      </div>
-      <div id="fdGraph" class="kmeans-chart"></div>
-      <div class="output">
-        <textarea readonly id="fdOutput"></textarea>
-      </div>
-    </div>
-
-    <!-- KMeans Force Directed Graph -->
-    <div class="bodyContainer">
-      <h1>Movie's | KMeans</h1>
-      <div class="inputForm">
-          <label>1</label><input type="range" id="kmeansNumber" value="100" min="1" max="1000"><label>1000</label>
-          <button id="kmeansButton" type="submit" value="submit"></button>
-      </div>
-      <div id="fdkmeans" class="kmeans-chart"></div>
-      <div class="output">
-        <textarea readonly id="kmeansOutput"></textarea>
-      </div>
-    </div>
-    
-
-    
-  </body>
-  
-  <script type="text/javascript">kMeans("#movieGraph", 475, 475, "graphNumber", 0, 0, "graphMoviesButton", "graphMoviesOutput");</script>
-  <!-- <script type="text/javascript">kMeans("#fdGraph", 475, 475, "fdNumber", 0, 0, "fdButton", "fdOutput");</script>
-  <script type="text/javascript">kMeans("#fdkmeans", 475, 475, "kmeansNumber", 21, 10, "kmeansButton", "kmeansOutput");</script> -->
-
- 
-</html> 
+</head>
+<body>
+    <h1>DataViz Project</h1>
+    <ul>
+        <li><a href="./movieGraph/index.html">Move Graph</a></li>
+        <li><a href="./fdGraph/index.html">Force Directed Graph</a></li>
+        <li>Kmeans Graph</li>
+    </ul>
+</body>
+</html>

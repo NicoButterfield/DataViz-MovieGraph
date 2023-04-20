@@ -8,7 +8,7 @@
  */
 "use strict";
 
-function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox) {
+function movieGraph(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox) {
 
     // the current iteration
     var iter = 1,
@@ -166,7 +166,7 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
             .attr("r", 8)
             .on("click", (d) => {
                 console.log(d.Title, d.Stars);
-                output.value = "Title: " + d.Title + "\nStars: " + d.Stars;
+                output.value += "Title: " + d.Title + "\nStars: " + d.Stars + "\n--\n";
             }); //Console Log Curr Point/Centroid onClick
             
         // Update old elements as needed
@@ -230,9 +230,9 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
                 y: y2
             }
             var link = {
-                source: source,
-                target: target,
-                weight: 1
+                source: pairsArr[i][0].id,
+                target: pairsArr[i][1].id,
+                value: 1
             };
 
 
@@ -301,7 +301,7 @@ function kMeans(elt, w, h, numPoints, numClusters, maxIter, goButton, outputBox)
             links: linesArr
         }
         let jsonFile = JSON.stringify(jsonObj);
-        console.log(jsonFile);
+        // console.log(jsonFile);
         
         var interval = setInterval(function() {
             if(iter < maxIter + 1) {

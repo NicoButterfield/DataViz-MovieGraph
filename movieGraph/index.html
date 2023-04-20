@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    
+    <!-- JS/CSS Files -->
+    <link rel="stylesheet" href="../main.css">
+
+    <!-- MovieGraph -->
+    <script type="text/javascript" src="movieGraph.js"></script>
+    <link type="text/css" rel="stylesheet" href="kmeans.css">
+
+    <!-- ForceDirect -->
+
+    <!-- KMEANS -->
+  </head>
+  
+  <body>
+    <!-- Graph Movie Data -->
+    <div class="bodyContainer">
+      <h1>Movie's | Connections</h1>
+      <div class="inputForm">
+          <label>1</label><input type="range" id="graphNumber" value="100" min="1" max="1000"><label>1000</label>
+          <button id="graphMoviesButton" type="submit" value="submit"></button>
+      </div>
+      <div class="graphandoutput">
+        <div id="movieGraph" class="kmeans-chart"></div>
+        <div class="output">
+          <textarea readonly id="graphMoviesOutput"></textarea>
+        </div>
+      </div>
+    </div>
+  </body>
+  
+  <script type="text/javascript">movieGraph("#movieGraph", 850, 550, "graphNumber", 0, 0, "graphMoviesButton", "graphMoviesOutput");</script>
+  <!-- <script type="text/javascript">kMeans("#fdGraph", 475, 475, "fdNumber", 0, 0, "fdButton", "fdOutput");</script>
+  <script type="text/javascript">kMeans("#fdkmeans", 475, 475, "kmeansNumber", 21, 10, "kmeansButton", "kmeansOutput");</script> -->
+
+ 
+</html> 

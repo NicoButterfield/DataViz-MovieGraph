@@ -2,7 +2,8 @@ body{
     font-family: 'Montserrat', sans-serif;
     background-color: rgb(28, 77, 118); 
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
     justify-content: space-around;
 }
 
@@ -56,10 +57,19 @@ button:hover{
     box-shadow: 3px 3px black;
     transform: scale(1.1);
 }
+
+.graphandoutput{
+    padding: 0px 50px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+}
 /* Hover/Click Output Box */
 .output textarea{
-    height: 50px;
-    width: 420px;
+    height: 98.7%;
+    min-height: 100px;
+    width: 300px;
     border: 1px solid black;
 
 
@@ -68,30 +78,9 @@ button:hover{
     box-shadow: 10px 10px black;
 }
 
-
-
-/* Given KMEANS Styling */
-.kmeans-chart {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    font-size: 9px;
-    background-color: whitesmoke;
-
-    width: fit-content;
-    border: 1px solid black;
-    box-shadow: 10px 10px black;
+li{
+    color: white;
 }
-.kmeans-chart .centroid {
-    stroke: #000;
-    stroke-width: 2px;
+a{
+    color: white;
 }
-.kmeans-chart text.label {
-    font-size: 12px;
-    fill: #333;
-}
-.kmeans-chart .axis line, .axis path {
-    fill: none;
-    stroke-width: 1px;
-    stroke: #ccc;
-    shape-rendering: crispEdges;
-}
-
