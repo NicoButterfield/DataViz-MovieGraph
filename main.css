@@ -1,86 +1,53 @@
 body{
     font-family: 'Montserrat', sans-serif;
     background-color: rgb(28, 77, 118); 
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: space-around;
+    padding: 25px;
 }
-
-/* Container for Graph Columns */
-.bodyContainer{
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-/* Title */
 h1{
-    align-self: center;
-    padding: 10px;
-    width: fit-content;
-    border: 1px solid black;
-    box-shadow: 10px 10px  black;
-    background-color: whitesmoke;
+    color: white;
+    text-align: center;
 }
-
-/* User Inputs */
-.inputForm{
-    align-self: center;
-    width: fit-content;
+.flexContainer{
     display: flex;
-    gap: 5px;
-    align-items: center;
-}
-input{
-    width: 300px;
-    margin-bottom: 10px;
-}
-label{
-    color: whitesmoke;
-}
-button{
-    width: 40px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 1px solid black;
-    background-color: whitesmoke;
-    font-family: 'Montserrat', sans-serif;
-    border-radius: 10px;
-    transition: all 0.25s;
-}
-button:hover{
-    box-shadow: 3px 3px black;
-    transform: scale(1.1);
-}
-
-.graphandoutput{
-    padding: 0px 50px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
     gap: 25px;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
-/* Hover/Click Output Box */
-.output textarea{
-    height: 98.7%;
-    min-height: 100px;
-    width: 300px;
-    border: 1px solid black;
+.flexItem{
+    flex: 1;
+    min-width: 300px;
 
+    height: 600px;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    resize: none;
-    outline: none;
-    box-shadow: 10px 10px black;
+    transition: all 0.5s;
 }
-
-li{
+.flexItem:hover{
+    flex: 2;
+}
+.flexItem h3{
     color: white;
+    border-bottom: 1px solid white;
+    padding: 10px;
 }
-a{
-    color: white;
+.flexItem a{
+    width: 100%;
+    height: 100%;
+
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.flexItem .mgIMG{
+    background-image: url("./images/mgSS.png");
+}
+.flexItem .fdIMG{
+    background-image: url("./images/fdSS.png");
+}
+.flexItem .kmIMG{
+    background-image: url("https://media.npr.org/assets/img/2019/04/14/gettyimages-1142672802_custom-2465725aad1c937145f942bb3396b1ea4d3dfe88.jpg");
 }
