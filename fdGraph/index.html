@@ -24,7 +24,7 @@
 <body>
   <div class="left">
     <h1>Force Directed Graph</h1>
-    <textarea readonly></textarea>
+    <textarea readonly id="fdOutput"></textarea>
   </div>
   <svg  id="fdsvg" width="1000" height="750"></svg>
 </body>
@@ -32,6 +32,7 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
+let output = document.getElementById("fdOutput");
 var svg = d3.select("#fdsvg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -64,7 +65,7 @@ d3.json("allMovies.json", function(error, graph) {
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended))
-          .on("click", (d) => console.log(d.Title));
+          .on("click", (d) => output.value+= "Title: " + d.Title + "\nStars: " + d.Stars + "\n--\n");
 
   node.append("title")
       .text(function(d) { return d.Title; });
