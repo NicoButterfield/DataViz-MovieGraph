@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!-- https://gist.github.com/mbostock/4062045 -->
+<head>
+  <meta charset="utf-8">
+  <style>
+    .links line {
+      stroke: rgb(24, 53, 240);
+      stroke-opacity: 5;
+    }
+    .nodes circle {
+      stroke: black;
+      stroke-width: 1.5px;
+    }
+  </style>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+
+  <!-- <link rel="stylesheet" href="./fdGraph.css"> -->
+  
+</head>
+<body>
+  <div class="left">
+    <h1>Force Directed Graph</h1>
+    <textarea readonly id="fdOutput"></textarea>
+  </div>
+  <svg  id="fdsvg" width="1500" height="1500"></svg>
+</body>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+ var iter = 1,
+        centroids = [],
+        points = [];
+
+        var numClusters = 23;
+        var maxIter = 20;
+var link;
+var node;
+
+
+let output = document.getElementById("fdOutput");
+
+
+var margin = {top: 30, right: 20, bottom: 20, left: 30},
+width = 1500- margin.left - margin.right,
+height = 1500 - margin.top - margin.bottom;
+
+var svg = d3.select("#fdsvg")
+  .style("width", width + margin.left + margin.right)
+  .style("height", height + margin.top + margin.bottom);
+
+  var colors = d3.scale.category20().range();
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+d3.json("allMovies.json", function(error, graph) {
+  if (error) throw error;
+
+  link = svg.append("g")
+      .attr("class", "links")
+    .selectAll("line")
+    .data(graph.links)
+    .enter().append("line")
+      .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  node = svg.append("g")
+      .attr("class", "nodes")
+    .selectAll("circle")
+    .data(graph.nodes)
+    .enter().append("circle")
+      .attr("r", 10)
+      .attr("class", function(d) { return d.type; }) ////.attr("fill", function(d) { return color(d.rating); })
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended))
+          .on("click", (d) => output.value+= "Title: " + d.Title + "\nStars: " + d.Stars + "\n--\n");
+
+  node.append("title")
+      .text(function(d) { return d.Title; });
+
+  simulation
+      .nodes(graph.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(graph.links);
+
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  }
+});
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+
+function getEuclidianDistance(a, b) {
+  var dx = b.x - a.x,
+      dy = b.y - a.y;
+  return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+}
+
+function getRandomPoint(type, fill) {
+  return { 
+      x: Math.round(Math.random() * width), 
+      y: Math.round(Math.random() * height),
+      type: type,
+      fill: fill 
+  };
+}
+
+function initializePoints(num, type) { //Add cvs here?
+  var result = [];
+  //console.log("AHFWFSBVEBVEBURV",num);
+  for (var i = 0; i < num; i++) {
+      var color = colors[i];
+     // <!-- if (type !== "centroid") {
+    //     color = "#ccc";
+     // } -->
+      var point = getRandomPoint(type, color);
+      //point.id = point.type + "-" + i;
+      result.push(point);
+  }
+  
+  return result;
+}
+
+function findClosestCentroid(point) {
+  var closest = {i: -1, distance: width * 2};
+  centroids.forEach(function(d, i) {
+    
+      var distance = getEuclidianDistance(d, point);
+      // Only update when the centroid is closer
+      if (distance < closest.distance) {
+          closest.i = i;
+          closest.distance = distance;
+      }
+  });
+  return (centroids[closest.i]); 
+}
+
+function colorizePoints() {
+
+  var p = svg.selectAll(".point");
+  console.log(p._groups[0].length);
+
+  for(let x = 0; x < p._groups[0].length; x++)
+  {
+    var closest = findClosestCentroid(p._groups[0][x].__data__);
+    
+    if(closest != null)
+    {
+      p._groups[0][x].__data__.fill = closest.fill;
+    }
+    
+  }
+ 
+
+  //var p = svg.selectAll(".point")
+    //closest.fill
+   // .attr("fill", function(d) { return color(d.rating); })
+   //console.log(p._groups[0][0].__data__);
+}
+
+/**
+* Computes the center of the cluster by taking the mean of the x and y 
+* coordinates.
+*/
+function computeClusterCenter(cluster) {
+  return [
+      d3.mean(cluster, function(d) { return d.x; }), 
+      d3.mean(cluster, function(d) { return d.y; })
+  ];
+}
+
+/**
+* Moves the centroids to the center of their cluster.
+*/
+function moveCentroids() {
+
+  var p2 = svg.selectAll(".point");
+  let pnt = [];
+  for(let x = 0; x < p2._groups[0].length; x++)
+  {
+    pnt[x] = p2._groups[0][x].__data__;
+  }
+  centroids.forEach(function(d) {
+      // Get clusters based on their fill color
+      var cluster = pnt.filter(function(e) {
+          return e.fill === d.fill;
+      });
+      // Compute the cluster centers
+      var center = computeClusterCenter(cluster);
+      // Move the centroid
+      d.x = center[0];
+      d.y = center[1];
+  });
+}
+
+/**
+* Updates the chart.
+*/
+function update() {
+
+ 
+  //console.log(points);
+  // The data join
+  var circle = svg.selectAll(".point")
+      //.data(data);
+      //console.log(circle); 
+  // Create new elements as needed
+  circle.enter().append("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("id", function(d) {return d.id; })
+      .attr("class", function(d) { return d.type; })
+      .attr("r", 5);
+    
+  
+var cen = svg.selectAll(".centroid");
+      
+      
+  // Create new elements as needed
+  cen.enter().append("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("id", function(d) {return d.id; })
+      .attr("class", function(d) { return d.type; })
+      .attr("r", 20)
+      .attr('fill', (d, i) => d.fill);
+
+      
+  // Update old elements as needed
+  circle.transition().delay(100).duration(1000)
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .style("fill", function(d) { return d.fill; });
+
+      cen.transition().delay(100).duration(1000)
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .style("fill", function(d) { return d.fill; });
+    
+
+  // Remove old nodes
+  circle.exit().remove();
+}
+
+function iterate() {
+        
+  // Update label
+  //setText("Iteration " + iter + " of " + maxIter);
+
+  // Colorize the points
+  colorizePoints();
+  
+  // Move the centroids
+  moveCentroids();
+  
+  // Update the chart
+  update();
+}
+
+function initialize() {
+        
+  // Initialize random points and centroids
+  centroids = initializePoints(numClusters, "centroid");
+
+  var data = centroids;
+      
+  var cen = svg.selectAll(".centroid")
+      .data(data);
+      
+      
+  // Create new elements as needed
+  cen.enter().append("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("id", function(d) {return d.id; })
+      .attr("class", function(d) { return d.type; })
+      .attr("r", 20)
+      .attr('fill', (d, i) => d.fill);
+
+  //points = svg.selectAll("circle");
+
+  //console.log(points);
+  //<!-- d3.json("allMovies.json", function(error, graph) {
+    //points = graph.nodes;
+   // console.log(points);
+  //}); -->
+
+  //console.log(points);
+  // initial drawing
+  
+  update();
+  
+  var interval = setInterval(function() {
+      if(iter < maxIter + 1) {
+          iterate();
+          iter++;
+      } else {
+          clearInterval(interval);
+         // setText("Done");
+      }
+  }, 2 * 1000);
+}
+
+// Call the main function
+
+
+setTimeout(initialize, 5000);
+
+
+</script>
