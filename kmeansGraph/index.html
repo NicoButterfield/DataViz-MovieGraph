@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <style>
     .links line {
-      stroke: rgb(24, 53, 240);
+      stroke: black;
       stroke-opacity: 5;
     }
     .nodes circle {
@@ -19,12 +19,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
 
-  <!-- <link rel="stylesheet" href="./fdGraph.css"> -->
+  <link rel="stylesheet" href="./fdGraph.css"> 
   
 </head>
 <body>
   <div class="left">
-    <h1>Force Directed Graph</h1>
+    <h1>Kmeans Applied on Force Directed Graph</h1>
     <textarea readonly id="fdOutput"></textarea>
   </div>
   <svg  id="fdsvg" width="1500" height="1500"></svg>
@@ -46,8 +46,8 @@ let output = document.getElementById("fdOutput");
 
 
 var margin = {top: 30, right: 20, bottom: 20, left: 30},
-width = 1500- margin.left - margin.right,
-height = 1500 - margin.top - margin.bottom;
+width = 1000- margin.left - margin.right,
+height = 1000 - margin.top - margin.bottom;
 
 var svg = d3.select("#fdsvg")
   .style("width", width + margin.left + margin.right)
