@@ -1,6 +1,9 @@
 # Data Visualization: Movie Actor Connections
 > Our goal for this project was to provide a visualisation of Movie Data in the form of the graph. 
-> [FinalSite](https://dannygrimmig.github.io/DataViz-MovieGraph/)
+
+
+## Finnal Site
+* [Github Pages](https://dannygrimmig.github.io/DataViz-MovieGraph/)
 
 ## Task
 1. Create a graph of the movie data, drawing connections based on shared actors.
