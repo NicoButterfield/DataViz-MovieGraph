@@ -2,7 +2,7 @@
 > Our goal for this project was to provide a visualisation of Movie Data in the form of the graph. 
 
 
-## Finnal Site
+## Final Site
 * [Github Pages](https://dannygrimmig.github.io/DataViz-MovieGraph/)
 
 ## Task
